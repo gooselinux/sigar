@@ -1,10 +1,10 @@
 Name:		sigar
 Version:	1.6.5
-Release:	0.1.git833ca18%{?dist}
+Release:	0.4.git58097d9%{?dist}
 Summary:	System Information Gatherer And Reporter
 
 %global sigar_suffix  0-g4b67f57
-%global sigar_hash    833ca18
+%global sigar_hash    58097d9
 
 Group:		System Environment/Libraries
 License:	ASL 2.0
@@ -24,6 +24,9 @@ Source0:	%{name}-%{version}-%{sigar_hash}.tbz2
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	gcc cmake
+
+Patch100: bz714249-1-cpu-count.patch
+Patch101: bz746288-1-cpu-count-arch.patch
 
 %description
 The Sigar API provides a portable interface for gathering system
@@ -55,6 +58,9 @@ Header files for developing against the Sigar API
 # When using the GitHub tarballs, use:
 # setup -q -n hyperic-{name}-{sigar_hash}
 %setup -q -n %{name}-%{version}
+
+%patch100 -p1 -b .bz714249
+%patch101 -p1 -b .bz746288
 
 %build
 
@@ -92,6 +98,17 @@ rm -rf $RPM_BUILD_ROOT
 %doc LICENSE NOTICE AUTHORS
 
 %changelog
+* Wed Oct 19 2011 Zane Bitter <zbitter@fedoraproject.org> - 1.6.5-0.4.git58097d9
+- Fix parsing of /proc/cpuinfo on non-x86 architectures
+  Resolves: #746288
+
+* Wed Sep 07 2011 Zane Bitter <zbitter@fedoraproject.org> - 1.6.5-0.3.git58097d9
+- Get CPU counts from /proc/cpuinfo
+  Resolves: #714249
+
+* Tue Jul 05 2011 Adam Stokes <astokes@fedoraproject.org> - 1.6.5-0.2.git58097d9
+- Resolves: rhbz688184 Windows network device naming
+
 * Thu Dec 16 2010 Andrew Beekhof <andrew@beekhof.net> - 1.6.5-0.1.git833ca18
 - Incorporate review feedback
   + Add calls to ldconfig
